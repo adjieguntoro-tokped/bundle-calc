@@ -1,12 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { useData, createDataClient, DataProvider } from 'react-isomorphic-data';
-import {
-  Input,
-  InputGroup,
-  InputRightElement,
-  Icon,
-  Spinner,
-} from '@chakra-ui/core';
+import { useData } from 'react-isomorphic-data';
+import { Input, InputGroup, InputRightElement, Spinner } from '@chakra-ui/core';
 
 import { PackageSumContext } from '../Layout/PackageSumProvider';
 import SearchResults from './SearchResults';
@@ -22,7 +16,7 @@ const SearchInput = () => {
     undefined,
     {
       skip: !searchText,
-    },
+    }
   );
 
   const packageSum = useContext(PackageSumContext);
@@ -45,6 +39,7 @@ const SearchInput = () => {
         searchText={searchText}
         packages={packageSum.packages}
         onAdd={packageSum.add}
+        refetch={refetch}
       />
     </div>
   );

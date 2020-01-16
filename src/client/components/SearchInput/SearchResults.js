@@ -1,13 +1,8 @@
 import React from 'react';
-import {
-  Collapse,
-  IconButton,
-  Spinner,
-  Button,
-  ButtonGroup,
-} from '@chakra-ui/core';
+import { Collapse, IconButton, Spinner } from '@chakra-ui/core';
+import SearchResultItem from './SearchResultItem';
 
-const SearchResults = ({ data, loading, error, searchText, packages, onAdd }) => {
+const SearchResults = ({ data, loading, error, searchText, packages, onAdd, refetch }) => {
   let content = null;
 
   if (!data && loading) {
@@ -17,26 +12,15 @@ const SearchResults = ({ data, loading, error, searchText, packages, onAdd }) =>
       const packageAndVersion = `${d.package.name}@${d.package.version}`;
       const alreadyAdded = packages.some(p => p[0] === packageAndVersion);
 
-      const onClick = () => {
-        onAdd({ name: d.package.name, version: d.package.version });
-      };
-
       return (
-        <ButtonGroup
-          spacing={4}
-          marginRight={2}
-          marginBottom={2}
+        <SearchResultItem
+          packageName={d.package.name}
+          packageVersion={d.package.version}
           key={packageAndVersion}
-        >
-          <Button
-            leftIcon={alreadyAdded ? 'check' : 'add'}
-            size="sm"
-            onClick={onClick}
-            disabled={alreadyAdded}
-          >
-            {packageAndVersion}
-          </Button>
-        </ButtonGroup>
+          onClick={onAdd}
+          disabled={alreadyAdded}
+          packageAndVersion={packageAndVersion}
+        />
       );
     });
   } else if (error) {
@@ -46,12 +30,7 @@ const SearchResults = ({ data, loading, error, searchText, packages, onAdd }) =>
         {loading ? (
           <Spinner />
         ) : (
-          <IconButton
-            icon="repeat"
-            variant="ghost"
-            onClick={refetch}
-            aria-label="retry search"
-          />
+          <IconButton icon="repeat" variant="ghost" onClick={refetch} aria-label="retry search" />
         )}
       </div>
     );
