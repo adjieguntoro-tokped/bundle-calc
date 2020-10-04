@@ -12,7 +12,7 @@ const statsFile = path.resolve('./dist/client/loadable-stats.json');
 
 const renderer = async (ctx, _next) => {
   console.log('Incoming request for url', ctx.url);
-  
+
   const extractor = new ChunkExtractor({ statsFile });
   const routerContext = {};
   const helmetContext = {};
@@ -30,10 +30,11 @@ const renderer = async (ctx, _next) => {
   const { helmet } = helmetContext;
 
   ctx.body = `
+    <!DOCTYPE html>
     <html>
       <head>
         ${helmet && helmet.meta ? helmet.meta.toString() : ''}
-        ${helmet && helmet.link ? helmet.link.toString(): ''}
+        ${helmet && helmet.link ? helmet.link.toString() : ''}
         ${helmet && helmet.style ? helmet.style.toString() : ''}
         ${extractor.getLinkTags({ crossorigin: 'anonymous' })}
       </head>
@@ -43,6 +44,6 @@ const renderer = async (ctx, _next) => {
       </body>
     </html>
   `;
-}
+};
 
 export default renderer;
